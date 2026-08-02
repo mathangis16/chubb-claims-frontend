@@ -73,8 +73,8 @@
       "incidentDate": "2026-07-30",
       "description": "Damage to vehicle when parked",
       "estimatedLoss": 2000,
-      "status": "SUBMITTED",
-      "assignedOfficer": null,
+      "status": "APPROVED",
+      "assignedOfficer": "Alex Wong",
       "createdAt": "2026-08-02T13:36:54.941Z",
       "id": "iJGP-HB6aXM"
     }

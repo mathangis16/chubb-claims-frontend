@@ -1,0 +1,423 @@
+:host {
+  display: block;
+}
+
+.page {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #b21f2d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #172033;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  max-width: 650px;
+  margin: 12px 0 0;
+  color: #667085;
+  line-height: 1.6;
+}
+
+.officer-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 10px 14px;
+}
+
+.avatar {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: #172033;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.officer-profile div {
+  display: flex;
+  flex-direction: column;
+}
+
+.officer-profile strong {
+  color: #172033;
+  font-size: 0.9rem;
+}
+
+.officer-profile div span {
+  margin-top: 2px;
+  color: #667085;
+  font-size: 0.76rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid #e4e7ec;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgb(16 24 40 / 5%);
+}
+
+.summary-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #b21f2d;
+  font-weight: 800;
+}
+
+.summary-card span {
+  color: #667085;
+  font-size: 0.8rem;
+}
+
+.summary-card strong {
+  display: block;
+  margin-top: 5px;
+  color: #172033;
+  font-size: 1.7rem;
+}
+
+.summary-card p {
+  margin: 5px 0 0;
+  color: #98a2b3;
+  font-size: 0.76rem;
+}
+
+.exposure-card {
+  background: #172033;
+}
+
+.exposure-card .summary-icon {
+  background: rgb(255 255 255 / 12%);
+  color: #ffffff;
+}
+
+.exposure-card span,
+.exposure-card p {
+  color: #c8ceda;
+}
+
+.exposure-card strong {
+  color: #ffffff;
+}
+
+.work-queue {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 6px 22px rgb(16 24 40 / 6%);
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 24px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.queue-header h2,
+.queue-header p {
+  margin: 0;
+}
+
+.queue-header h2 {
+  color: #172033;
+  font-size: 1.15rem;
+}
+
+.queue-header p {
+  margin-top: 5px;
+  color: #667085;
+  font-size: 0.82rem;
+}
+
+.queue-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.queue-controls label {
+  color: #475467;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+select,
+.refresh-button {
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #344054;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.refresh-button {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background: #f9fafb;
+  color: #667085;
+  padding: 12px 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+td {
+  border-top: 1px solid #eaecf0;
+  color: #344054;
+  padding: 17px 16px;
+  font-size: 0.84rem;
+  vertical-align: middle;
+}
+
+td strong,
+td > span {
+  display: block;
+}
+
+td strong {
+  color: #172033;
+}
+
+td > span {
+  margin-top: 4px;
+  color: #667085;
+  font-size: 0.76rem;
+}
+
+.type-badge,
+.status-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.type-badge {
+  background: #f2f4f7;
+  color: #475467;
+}
+
+.status-submitted {
+  background: #eef4ff;
+  color: #3538cd;
+}
+
+.status-under-review {
+  background: #fff7e8;
+  color: #b54708;
+}
+
+.status-info-requested {
+  background: #fff1f3;
+  color: #c01048;
+}
+
+.status-approved {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.status-rejected {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.unassigned {
+  color: #b54708;
+  font-weight: 600;
+}
+
+.officer-name {
+  color: #344054;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 210px;
+}
+
+.actions button {
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  padding: 7px 9px;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.actions .primary-action {
+  border-color: #172033;
+  background: #172033;
+  color: #ffffff;
+}
+
+.actions .approve-action {
+  border-color: #a6f4c5;
+  color: #027a48;
+}
+
+.actions .reject-action {
+  border-color: #fecdca;
+  color: #b42318;
+}
+
+.decision-complete {
+  color: #667085;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.error-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid #fecdca;
+  border-radius: 10px;
+  background: #fef3f2;
+  color: #b42318;
+  padding: 12px 14px;
+}
+
+.error-banner button {
+  border: 0;
+  background: transparent;
+  color: #b42318;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.state-card {
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  color: #667085;
+  text-align: center;
+}
+
+.state-card h3,
+.state-card p {
+  margin: 0;
+}
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid #eaecf0;
+  border-top-color: #b21f2d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1100px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .page {
+    padding: 32px 16px 56px;
+  }
+
+  .page-header,
+  .queue-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .queue-controls {
+    flex-wrap: wrap;
+  }
+}
