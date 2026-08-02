@@ -9,9 +9,12 @@
   <div class="page-header">
     <div>
       <p class="eyebrow">Claims operations</p>
+
       <h1>Officer dashboard</h1>
+
       <p class="subtitle">
-        Review incoming claims, manage assignments and monitor outstanding exposure.
+        Review incoming claims, manage assignments and monitor
+        outstanding exposure.
       </p>
     </div>
 
@@ -29,7 +32,10 @@
     <div class="error-banner">
       <span>{{ errorMessage }}</span>
 
-      <button type="button" (click)="loadClaims()">
+      <button
+        type="button"
+        (click)="loadClaims()"
+      >
         Try again
       </button>
     </div>
@@ -88,6 +94,7 @@
     <div class="queue-header">
       <div>
         <h2>Claims work queue</h2>
+
         <p>
           {{ filteredClaims.length }}
           {{ filteredClaims.length === 1 ? 'claim' : 'claims' }}
@@ -97,7 +104,9 @@
 
       <div class="queue-controls">
         <div class="search-field">
-          <label for="claimSearch">Search claims</label>
+          <label for="claimSearch">
+            Search claims
+          </label>
 
           <input
             id="claimSearch"
@@ -109,28 +118,45 @@
         </div>
 
         <div class="control-field">
-          <label for="statusFilter">Status</label>
+          <label for="statusFilter">
+            Status
+          </label>
 
           <select
             id="statusFilter"
             [value]="selectedStatus"
             (change)="setStatusFilter($event)"
           >
-            <option value="ALL">All statuses</option>
-            <option value="SUBMITTED">Submitted</option>
+            <option value="ALL">
+              All statuses
+            </option>
+
+            <option value="SUBMITTED">
+              Submitted
+            </option>
+
             <option value="UNDER_REVIEW">
               Under review
             </option>
+
             <option value="INFO_REQUESTED">
               Information requested
             </option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
+
+            <option value="APPROVED">
+              Approved
+            </option>
+
+            <option value="REJECTED">
+              Rejected
+            </option>
           </select>
         </div>
 
         <div class="control-field">
-          <label for="sortOrder">Sort by</label>
+          <label for="sortOrder">
+            Sort by
+          </label>
 
           <select
             id="sortOrder"
@@ -140,9 +166,11 @@
             <option value="NEWEST">
               Newest first
             </option>
+
             <option value="OLDEST">
               Oldest first
             </option>
+
             <option value="HIGHEST_LOSS">
               Highest estimated loss
             </option>
@@ -180,6 +208,7 @@
     } @else if (filteredClaims.length === 0) {
       <div class="state-card">
         <h3>No claims found</h3>
+
         <p>
           No claims match the current search and filters.
         </p>
@@ -203,6 +232,7 @@
               <th>Estimated loss</th>
               <th>Status</th>
               <th>Assigned officer</th>
+              <th>Additional information</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -211,15 +241,26 @@
             @for (claim of filteredClaims; track claim.id) {
               <tr>
                 <td>
-                  <strong>{{ claim.referenceNumber }}</strong>
+                  <strong>
+                    {{ claim.referenceNumber }}
+                  </strong>
+
                   <span>
-                    {{ claim.createdAt | date: 'd MMM yyyy' }}
+                    {{
+                      claim.createdAt
+                        | date: 'd MMM yyyy'
+                    }}
                   </span>
                 </td>
 
                 <td>
-                  <strong>{{ claim.claimantName }}</strong>
-                  <span>{{ claim.claimantEmail }}</span>
+                  <strong>
+                    {{ claim.claimantName }}
+                  </strong>
+
+                  <span>
+                    {{ claim.claimantEmail }}
+                  </span>
                 </td>
 
                 <td>
@@ -236,7 +277,10 @@
                   <strong>
                     {{
                       claim.estimatedLoss
-                        | currency: 'SGD' : 'symbol' : '1.0-0'
+                        | currency
+                          : 'SGD'
+                          : 'symbol'
+                          : '1.0-0'
                     }}
                   </strong>
 
@@ -269,15 +313,59 @@
                 </td>
 
                 <td>
+                  @if (claim.additionalInformation) {
+                    <details class="information-details">
+                      <summary>
+                        View response
+                      </summary>
+
+                      <div class="information-response">
+                        <p>
+                          {{ claim.additionalInformation }}
+                        </p>
+
+                        @if (claim.informationProvidedAt) {
+                          <span>
+                            Submitted
+                            {{
+                              claim.informationProvidedAt
+                                | date: 'd MMM yyyy, h:mm a'
+                            }}
+                          </span>
+                        }
+                      </div>
+                    </details>
+                  } @else if (
+                    claim.status === 'INFO_REQUESTED'
+                  ) {
+                    <span
+                      class="response-status waiting-response"
+                    >
+                      Awaiting claimant
+                    </span>
+                  } @else {
+                    <span
+                      class="response-status no-response"
+                    >
+                      Not required
+                    </span>
+                  }
+                </td>
+
+                <td>
                   <div class="actions">
                     @if (!claim.assignedOfficer) {
                       <button
                         type="button"
                         class="primary-action"
-                        [disabled]="actionInProgressId === claim.id"
+                        [disabled]="
+                          actionInProgressId === claim.id
+                        "
                         (click)="assignToMe(claim)"
                       >
-                        @if (actionInProgressId === claim.id) {
+                        @if (
+                          actionInProgressId === claim.id
+                        ) {
                           Assigning...
                         } @else {
                           Assign to me
@@ -288,11 +376,20 @@
                       claim.status === 'UNDER_REVIEW' ||
                       claim.status === 'INFO_REQUESTED'
                     ) {
-                      @if (claim.status !== 'INFO_REQUESTED') {
+                      @if (
+                        claim.status !== 'INFO_REQUESTED'
+                      ) {
                         <button
                           type="button"
-                          [disabled]="actionInProgressId === claim.id"
-                          (click)="changeStatus(claim, 'INFO_REQUESTED')"
+                          [disabled]="
+                            actionInProgressId === claim.id
+                          "
+                          (click)="
+                            changeStatus(
+                              claim,
+                              'INFO_REQUESTED'
+                            )
+                          "
                         >
                           Request info
                         </button>
@@ -301,10 +398,19 @@
                       <button
                         type="button"
                         class="approve-action"
-                        [disabled]="actionInProgressId === claim.id"
-                        (click)="changeStatus(claim, 'APPROVED')"
+                        [disabled]="
+                          actionInProgressId === claim.id
+                        "
+                        (click)="
+                          changeStatus(
+                            claim,
+                            'APPROVED'
+                          )
+                        "
                       >
-                        @if (actionInProgressId === claim.id) {
+                        @if (
+                          actionInProgressId === claim.id
+                        ) {
                           Updating...
                         } @else {
                           Approve
@@ -314,8 +420,15 @@
                       <button
                         type="button"
                         class="reject-action"
-                        [disabled]="actionInProgressId === claim.id"
-                        (click)="changeStatus(claim, 'REJECTED')"
+                        [disabled]="
+                          actionInProgressId === claim.id
+                        "
+                        (click)="
+                          changeStatus(
+                            claim,
+                            'REJECTED'
+                          )
+                        "
                       >
                         Reject
                       </button>

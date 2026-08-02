@@ -393,6 +393,97 @@ td > span {
   font-weight: 600;
 }
 
+.information-details {
+  position: relative;
+  min-width: 130px;
+}
+
+.information-details summary {
+  width: fit-content;
+  border-radius: 7px;
+  color: #3538cd;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.information-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.information-details summary::after {
+  margin-left: 5px;
+  content: '▾';
+  font-size: 0.7rem;
+}
+
+.information-details[open] summary::after {
+  content: '▴';
+}
+
+.information-details summary:hover {
+  text-decoration: underline;
+}
+
+.information-details summary:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #3538cd;
+  outline-offset: 3px;
+}
+
+.information-response {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 300px;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 14px;
+  box-shadow: 0 12px 30px rgb(16 24 40 / 16%);
+}
+
+.information-response p {
+  margin: 0;
+  color: #344054;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.information-response span {
+  display: block;
+  margin-top: 10px;
+  border-top: 1px solid #eaecf0;
+  padding-top: 9px;
+  color: #667085;
+  font-size: 0.7rem;
+}
+
+.response-status {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.waiting-response {
+  background: #fff7e8;
+  color: #b54708;
+}
+
+.no-response {
+  background: #f2f4f7;
+  color: #667085;
+}
+
 .actions {
   display: flex;
   min-width: 210px;
@@ -431,6 +522,22 @@ td > span {
 .actions .reject-action {
   border-color: #fecdca;
   color: #b42318;
+}
+
+.actions button:hover:not(:disabled) {
+  box-shadow: 0 2px 8px rgb(16 24 40 / 8%);
+}
+
+.actions .primary-action:hover:not(:disabled) {
+  background: #26324a;
+}
+
+.actions .approve-action:hover:not(:disabled) {
+  background: #ecfdf3;
+}
+
+.actions .reject-action:hover:not(:disabled) {
+  background: #fef3f2;
 }
 
 .decision-complete {
@@ -540,5 +647,11 @@ td > span {
     right: 16px;
     left: 16px;
     max-width: none;
+  }
+
+  .information-response {
+    right: auto;
+    left: 0;
+    width: 260px;
   }
 }
