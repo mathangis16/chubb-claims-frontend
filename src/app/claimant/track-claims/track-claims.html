@@ -1,1 +1,91 @@
-<p>track-claims works!</p>
+<section class="page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Claimant portal</p>
+      <h1>Track your claims</h1>
+      <p class="subtitle">
+        View the latest status and details of your submitted claims.
+      </p>
+    </div>
+
+    <button type="button" class="refresh-button" (click)="loadClaims()">
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <p>Loading your claims...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-card error-state">
+      <h2>Unable to load claims</h2>
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadClaims()">Try again</button>
+    </div>
+  } @else if (claims.length === 0) {
+    <div class="state-card">
+      <h2>No claims yet</h2>
+      <p>Your submitted claims will appear here.</p>
+    </div>
+  } @else {
+    <div class="claims-summary">
+      <span>{{ claims.length }} total claims</span>
+      <span>Last refreshed just now</span>
+    </div>
+
+    <div class="claims-grid">
+      @for (claim of claims; track claim.id) {
+        <article class="claim-card">
+          <div class="card-header">
+            <div>
+              <p class="reference-label">Claim reference</p>
+              <h2>{{ claim.referenceNumber }}</h2>
+            </div>
+
+            <span class="status-badge" [class]="statusClass(claim.status)">
+              {{ formatStatus(claim.status) }}
+            </span>
+          </div>
+
+          <div class="claim-type">
+            {{ claim.claimType === 'MOTOR' ? 'Motor claim' : 'Property claim' }}
+          </div>
+
+          <p class="description">{{ claim.description }}</p>
+
+          <div class="details-grid">
+            <div>
+              <span class="detail-label">Incident date</span>
+              <strong>{{ claim.incidentDate | date: 'd MMM yyyy' }}</strong>
+            </div>
+
+            <div>
+              <span class="detail-label">Estimated loss</span>
+              <strong>
+                {{ claim.estimatedLoss | currency: 'SGD' : 'symbol' : '1.0-0' }}
+              </strong>
+            </div>
+
+            <div>
+              <span class="detail-label">Assigned officer</span>
+              <strong>{{ claim.assignedOfficer || 'Not assigned yet' }}</strong>
+            </div>
+
+            <div>
+              <span class="detail-label">Submitted</span>
+              <strong>{{ claim.createdAt | date: 'd MMM yyyy' }}</strong>
+            </div>
+          </div>
+
+          @if (claim.status === 'INFO_REQUESTED') {
+            <div class="attention-message">
+              Additional information is required for this claim.
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+</section>

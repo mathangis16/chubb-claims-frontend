@@ -1,0 +1,69 @@
+{
+  "claims": [
+    {
+      "id": "1",
+      "referenceNumber": "CLM-1001",
+      "claimType": "MOTOR",
+      "claimantName": "Sarah Tan",
+      "claimantEmail": "sarah.tan@example.com",
+      "incidentDate": "2026-07-28",
+      "description": "Rear bumper damaged in a minor collision.",
+      "estimatedLoss": 3500,
+      "status": "SUBMITTED",
+      "assignedOfficer": null,
+      "createdAt": "2026-07-28T09:30:00"
+    },
+    {
+      "id": "2",
+      "referenceNumber": "CLM-1002",
+      "claimType": "PROPERTY",
+      "claimantName": "Daniel Lim",
+      "claimantEmail": "daniel.lim@example.com",
+      "incidentDate": "2026-07-25",
+      "description": "Water damage caused by a leaking kitchen pipe.",
+      "estimatedLoss": 8000,
+      "status": "UNDER_REVIEW",
+      "assignedOfficer": "Alex Wong",
+      "createdAt": "2026-07-26T11:15:00"
+    },
+    {
+      "id": "3",
+      "referenceNumber": "CLM-1003",
+      "claimType": "MOTOR",
+      "claimantName": "Priya Nair",
+      "claimantEmail": "priya.nair@example.com",
+      "incidentDate": "2026-07-22",
+      "description": "Damage to the vehicle door while parked.",
+      "estimatedLoss": 2200,
+      "status": "INFO_REQUESTED",
+      "assignedOfficer": "Alex Wong",
+      "createdAt": "2026-07-23T14:45:00"
+    },
+    {
+      "id": "4",
+      "referenceNumber": "CLM-1004",
+      "claimType": "PROPERTY",
+      "claimantName": "Marcus Lee",
+      "claimantEmail": "marcus.lee@example.com",
+      "incidentDate": "2026-07-18",
+      "description": "Living room window damaged during heavy rain.",
+      "estimatedLoss": 4700,
+      "status": "APPROVED",
+      "assignedOfficer": "Bob Allen",
+      "createdAt": "2026-07-19T08:20:00"
+    },
+    {
+      "id": "5",
+      "referenceNumber": "CLM-1005",
+      "claimType": "MOTOR",
+      "claimantName": "Aisha Rahman",
+      "claimantEmail": "aisha.rahman@example.com",
+      "incidentDate": "2026-07-15",
+      "description": "Claim submitted for damage to a side mirror.",
+      "estimatedLoss": 900,
+      "status": "REJECTED",
+      "assignedOfficer": "Bob Allen",
+      "createdAt": "2026-07-16T10:00:00"
+    }
+  ]
+}
