@@ -1,13 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+} from '@angular/common/http/testing';
 
-import { Claim } from './claim';
+import { ClaimService } from './claim';
 
-describe('Claim', () => {
-  let service: Claim;
+describe('ClaimService', () => {
+  let service: ClaimService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Claim);
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
+
+    service = TestBed.inject(ClaimService);
   });
 
   it('should be created', () => {
