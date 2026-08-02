@@ -66,17 +66,17 @@
       "createdAt": "2026-07-16T10:00:00"
     },
     {
-      "referenceNumber": "CLM-814941",
+      "referenceNumber": "CLM-101988",
       "claimType": "PROPERTY",
       "claimantName": "Jake Ross",
       "claimantEmail": "jakeross16@example.com",
-      "incidentDate": "2026-07-30",
-      "description": "Damage to vehicle when parked",
-      "estimatedLoss": 2000,
+      "incidentDate": "2026-07-27",
+      "description": "Wooden floors damaged from heavy rains",
+      "estimatedLoss": 4000,
       "status": "APPROVED",
       "assignedOfficer": "Alex Wong",
-      "createdAt": "2026-08-02T13:36:54.941Z",
-      "id": "iJGP-HB6aXM"
+      "createdAt": "2026-08-02T14:48:21.988Z",
+      "id": "RBaQVzXRlSM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

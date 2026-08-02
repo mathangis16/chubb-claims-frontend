@@ -1,7 +1,39 @@
-<nav>
-  <a routerLink="/claimant/submit">Submit Claim</a>
-  <a routerLink="/claimant/claims">Track Claims</a>
-  <a routerLink="/officer/dashboard">Officer Dashboard</a>
-</nav>
+<header class="app-header">
+  <div class="header-inner">
+    <a class="brand" routerLink="/claimant/submit">
+      <span class="brand-mark">C</span>
 
-<router-outlet></router-outlet>
+      <span class="brand-text">
+        <strong>Chubb Claims</strong>
+        <small>APAC Claims Portal</small>
+      </span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <a
+        routerLink="/claimant/submit"
+        routerLinkActive="active"
+      >
+        Submit claim
+      </a>
+
+      <a
+        routerLink="/claimant/claims"
+        routerLinkActive="active"
+      >
+        Track claims
+      </a>
+
+      <a
+        routerLink="/officer/dashboard"
+        routerLinkActive="active"
+      >
+        Officer dashboard
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="app-content">
+  <router-outlet></router-outlet>
+</main>
