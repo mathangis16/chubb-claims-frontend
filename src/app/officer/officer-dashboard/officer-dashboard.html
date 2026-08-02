@@ -1,16 +1,23 @@
 <section class="page">
+  @if (successMessage) {
+    <div class="success-toast" role="status">
+      <span class="toast-icon">✓</span>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
   <div class="page-header">
     <div>
       <p class="eyebrow">Claims operations</p>
       <h1>Officer dashboard</h1>
       <p class="subtitle">
-        Review incoming claims, manage assignments and
-        monitor outstanding exposure.
+        Review incoming claims, manage assignments and monitor outstanding exposure.
       </p>
     </div>
 
     <div class="officer-profile">
       <span class="avatar">AW</span>
+
       <div>
         <strong>Alex Wong</strong>
         <span>Claims Officer</span>
@@ -21,6 +28,7 @@
   @if (errorMessage) {
     <div class="error-banner">
       <span>{{ errorMessage }}</span>
+
       <button type="button" (click)="loadClaims()">
         Try again
       </button>
@@ -30,6 +38,7 @@
   <div class="summary-grid">
     <article class="summary-card">
       <div class="summary-icon">⌁</div>
+
       <div>
         <span>Unassigned claims</span>
         <strong>{{ unassignedCount }}</strong>
@@ -39,6 +48,7 @@
 
     <article class="summary-card">
       <div class="summary-icon">◷</div>
+
       <div>
         <span>Under review</span>
         <strong>{{ underReviewCount }}</strong>
@@ -48,6 +58,7 @@
 
     <article class="summary-card">
       <div class="summary-icon">!</div>
+
       <div>
         <span>Information requested</span>
         <strong>{{ informationRequestedCount }}</strong>
@@ -57,14 +68,17 @@
 
     <article class="summary-card exposure-card">
       <div class="summary-icon">$</div>
+
       <div>
         <span>Outstanding exposure</span>
+
         <strong>
           {{
             outstandingExposure
               | currency: 'SGD' : 'symbol' : '1.0-0'
           }}
         </strong>
+
         <p>Estimated open claim value</p>
       </div>
     </article>
@@ -75,36 +89,85 @@
       <div>
         <h2>Claims work queue</h2>
         <p>
-          {{ filteredClaims.length }} claims currently shown
+          {{ filteredClaims.length }}
+          {{ filteredClaims.length === 1 ? 'claim' : 'claims' }}
+          currently shown
         </p>
       </div>
 
       <div class="queue-controls">
-        <label for="statusFilter">Status</label>
+        <div class="search-field">
+          <label for="claimSearch">Search claims</label>
 
-        <select
-          id="statusFilter"
-          [value]="selectedStatus"
-          (change)="setFilter($event)"
+          <input
+            id="claimSearch"
+            type="search"
+            placeholder="Reference, name or email"
+            [value]="searchTerm"
+            (input)="setSearch($event)"
+          />
+        </div>
+
+        <div class="control-field">
+          <label for="statusFilter">Status</label>
+
+          <select
+            id="statusFilter"
+            [value]="selectedStatus"
+            (change)="setStatusFilter($event)"
+          >
+            <option value="ALL">All statuses</option>
+            <option value="SUBMITTED">Submitted</option>
+            <option value="UNDER_REVIEW">
+              Under review
+            </option>
+            <option value="INFO_REQUESTED">
+              Information requested
+            </option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+
+        <div class="control-field">
+          <label for="sortOrder">Sort by</label>
+
+          <select
+            id="sortOrder"
+            [value]="selectedSort"
+            (change)="setSort($event)"
+          >
+            <option value="NEWEST">
+              Newest first
+            </option>
+            <option value="OLDEST">
+              Oldest first
+            </option>
+            <option value="HIGHEST_LOSS">
+              Highest estimated loss
+            </option>
+          </select>
+        </div>
+
+        <button
+          type="button"
+          class="clear-button"
+          (click)="clearFilters()"
         >
-          <option value="ALL">All statuses</option>
-          <option value="SUBMITTED">Submitted</option>
-          <option value="UNDER_REVIEW">
-            Under review
-          </option>
-          <option value="INFO_REQUESTED">
-            Information requested
-          </option>
-          <option value="APPROVED">Approved</option>
-          <option value="REJECTED">Rejected</option>
-        </select>
+          Clear
+        </button>
 
         <button
           type="button"
           class="refresh-button"
+          [disabled]="isLoading"
           (click)="loadClaims()"
         >
-          Refresh
+          @if (isLoading) {
+            Refreshing...
+          } @else {
+            Refresh
+          }
         </button>
       </div>
     </div>
@@ -118,8 +181,16 @@
       <div class="state-card">
         <h3>No claims found</h3>
         <p>
-          There are no claims matching this status.
+          No claims match the current search and filters.
         </p>
+
+        <button
+          type="button"
+          class="clear-empty-button"
+          (click)="clearFilters()"
+        >
+          Clear filters
+        </button>
       </div>
     } @else {
       <div class="table-wrapper">
@@ -165,12 +236,15 @@
                   <strong>
                     {{
                       claim.estimatedLoss
-                        | currency
-                          : 'SGD'
-                          : 'symbol'
-                          : '1.0-0'
+                        | currency: 'SGD' : 'symbol' : '1.0-0'
                     }}
                   </strong>
+
+                  @if (isHighExposure(claim)) {
+                    <span class="priority-badge">
+                      High exposure
+                    </span>
+                  }
                 </td>
 
                 <td>
@@ -200,54 +274,48 @@
                       <button
                         type="button"
                         class="primary-action"
-                        [disabled]="
-                          actionInProgressId === claim.id
-                        "
+                        [disabled]="actionInProgressId === claim.id"
                         (click)="assignToMe(claim)"
                       >
-                        Assign to me
+                        @if (actionInProgressId === claim.id) {
+                          Assigning...
+                        } @else {
+                          Assign to me
+                        }
                       </button>
                     } @else if (
-                      claim.status !== 'APPROVED' &&
-                      claim.status !== 'REJECTED'
+                      claim.status === 'SUBMITTED' ||
+                      claim.status === 'UNDER_REVIEW' ||
+                      claim.status === 'INFO_REQUESTED'
                     ) {
-                      <button
-                        type="button"
-                        [disabled]="
-                          actionInProgressId === claim.id
-                        "
-                        (click)="
-                          changeStatus(
-                            claim,
-                            'INFO_REQUESTED'
-                          )
-                        "
-                      >
-                        Request info
-                      </button>
+                      @if (claim.status !== 'INFO_REQUESTED') {
+                        <button
+                          type="button"
+                          [disabled]="actionInProgressId === claim.id"
+                          (click)="changeStatus(claim, 'INFO_REQUESTED')"
+                        >
+                          Request info
+                        </button>
+                      }
 
                       <button
                         type="button"
                         class="approve-action"
-                        [disabled]="
-                          actionInProgressId === claim.id
-                        "
-                        (click)="
-                          changeStatus(claim, 'APPROVED')
-                        "
+                        [disabled]="actionInProgressId === claim.id"
+                        (click)="changeStatus(claim, 'APPROVED')"
                       >
-                        Approve
+                        @if (actionInProgressId === claim.id) {
+                          Updating...
+                        } @else {
+                          Approve
+                        }
                       </button>
 
                       <button
                         type="button"
                         class="reject-action"
-                        [disabled]="
-                          actionInProgressId === claim.id
-                        "
-                        (click)="
-                          changeStatus(claim, 'REJECTED')
-                        "
+                        [disabled]="actionInProgressId === claim.id"
+                        (click)="changeStatus(claim, 'REJECTED')"
                       >
                         Reject
                       </button>

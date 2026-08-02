@@ -32,6 +32,7 @@
             id="incidentDate"
             type="date"
             formControlName="incidentDate"
+            [max]="maxIncidentDate"
           />
           @if (fieldInvalid('incidentDate')) {
             <p class="field-error">Please select the incident date.</p>

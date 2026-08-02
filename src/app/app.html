@@ -9,28 +9,56 @@
       </span>
     </a>
 
-    <nav aria-label="Main navigation">
-      <a
-        routerLink="/claimant/submit"
-        routerLinkActive="active"
+    <div class="header-actions">
+      <div
+        class="role-switch"
+        role="group"
+        aria-label="Select user role"
       >
-        Submit claim
-      </a>
+        <button
+          type="button"
+          [class.active]="selectedRole === 'CLAIMANT'"
+          [attr.aria-pressed]="selectedRole === 'CLAIMANT'"
+          (click)="switchRole('CLAIMANT')"
+        >
+          Claimant
+        </button>
 
-      <a
-        routerLink="/claimant/claims"
-        routerLinkActive="active"
-      >
-        Track claims
-      </a>
+        <button
+          type="button"
+          [class.active]="selectedRole === 'OFFICER'"
+          [attr.aria-pressed]="selectedRole === 'OFFICER'"
+          (click)="switchRole('OFFICER')"
+        >
+          Claims Officer
+        </button>
+      </div>
 
-      <a
-        routerLink="/officer/dashboard"
-        routerLinkActive="active"
-      >
-        Officer dashboard
-      </a>
-    </nav>
+      <nav aria-label="Main navigation">
+        @if (selectedRole === 'CLAIMANT') {
+          <a
+            routerLink="/claimant/submit"
+            routerLinkActive="active"
+          >
+            Submit claim
+          </a>
+
+          <a
+            routerLink="/claimant/claims"
+            routerLinkActive="active"
+          >
+            Track claims
+          </a>
+        } @else {
+          <a
+            routerLink="/officer/dashboard"
+            routerLinkActive="active"
+          >
+            Officer dashboard
+          </a>
+        }
+      </nav>
+    </div>
   </div>
 </header>
 

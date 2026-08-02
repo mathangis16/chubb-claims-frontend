@@ -9,8 +9,8 @@
       "incidentDate": "2026-07-28",
       "description": "Rear bumper damaged in a minor collision.",
       "estimatedLoss": 3500,
-      "status": "SUBMITTED",
-      "assignedOfficer": null,
+      "status": "UNDER_REVIEW",
+      "assignedOfficer": "Alex Wong",
       "createdAt": "2026-07-28T09:30:00"
     },
     {
@@ -22,7 +22,7 @@
       "incidentDate": "2026-07-25",
       "description": "Water damage caused by a leaking kitchen pipe.",
       "estimatedLoss": 8000,
-      "status": "UNDER_REVIEW",
+      "status": "REJECTED",
       "assignedOfficer": "Alex Wong",
       "createdAt": "2026-07-26T11:15:00"
     },

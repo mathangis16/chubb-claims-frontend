@@ -15,7 +15,7 @@
 .header-inner {
   display: flex;
   max-width: 1320px;
-  min-height: 72px;
+  min-height: 76px;
   margin: 0 auto;
   padding: 0 24px;
   align-items: center;
@@ -25,6 +25,7 @@
 
 .brand {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 11px;
   color: #172033;
@@ -33,8 +34,8 @@
 
 .brand-mark {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   border-radius: 10px;
   background: #b21f2d;
@@ -56,6 +57,46 @@
   margin-top: 2px;
   color: #667085;
   font-size: 0.7rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.role-switch {
+  display: flex;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #f9fafb;
+  padding: 3px;
+}
+
+.role-switch button {
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #667085;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.role-switch button:hover {
+  color: #172033;
+}
+
+.role-switch button.active {
+  background: #ffffff;
+  color: #a51d2a;
+  box-shadow: 0 1px 4px rgb(16 24 40 / 10%);
 }
 
 nav {
@@ -87,16 +128,36 @@ nav a.active {
 }
 
 .app-content {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh - 76px);
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .header-inner {
     min-height: auto;
     padding-block: 14px;
     flex-direction: column;
     align-items: stretch;
+    gap: 14px;
+  }
+
+  .header-actions {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 620px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
+  }
+
+  .role-switch {
+    width: 100%;
+  }
+
+  .role-switch button {
+    flex: 1;
   }
 
   nav {

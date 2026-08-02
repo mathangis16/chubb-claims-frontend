@@ -24,12 +24,17 @@ export class SubmitClaim {
   private readonly claimService = inject(ClaimService);
   private readonly changeDetector = inject(ChangeDetectorRef);
 
+  readonly maxIncidentDate = new Date()
+    .toISOString()
+    .split('T')[0];
+
   isSubmitting = false;
   submittedClaim: Claim | null = null;
   errorMessage = '';
 
   claimForm = this.formBuilder.nonNullable.group({
     claimType: ['MOTOR', Validators.required],
+
     claimantName: [
       '',
       [
@@ -37,6 +42,7 @@ export class SubmitClaim {
         Validators.minLength(2),
       ],
     ],
+
     claimantEmail: [
       '',
       [
@@ -44,7 +50,9 @@ export class SubmitClaim {
         Validators.email,
       ],
     ],
+
     incidentDate: ['', Validators.required],
+
     description: [
       '',
       [
@@ -53,6 +61,7 @@ export class SubmitClaim {
         Validators.maxLength(500),
       ],
     ],
+
     estimatedLoss: [
       0,
       [
@@ -103,6 +112,7 @@ export class SubmitClaim {
 
         this.changeDetector.detectChanges();
       },
+
       error: (error) => {
         console.error('Claim submission failed:', error);
 

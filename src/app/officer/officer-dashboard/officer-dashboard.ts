@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Observable } from 'rxjs';
 
 import {
   Claim,
@@ -13,6 +14,7 @@ import {
 import { ClaimService } from '../../core/services/claim';
 
 type StatusFilter = 'ALL' | ClaimStatus;
+type SortOption = 'NEWEST' | 'OLDEST' | 'HIGHEST_LOSS';
 
 @Component({
   selector: 'app-officer-dashboard',
@@ -25,9 +27,14 @@ export class OfficerDashboard implements OnInit {
   private readonly changeDetector = inject(ChangeDetectorRef);
 
   claims: Claim[] = [];
+
   selectedStatus: StatusFilter = 'ALL';
+  selectedSort: SortOption = 'NEWEST';
+  searchTerm = '';
+
   isLoading = true;
   errorMessage = '';
+  successMessage = '';
   actionInProgressId: string | null = null;
 
   ngOnInit(): void {
@@ -35,13 +42,36 @@ export class OfficerDashboard implements OnInit {
   }
 
   get filteredClaims(): Claim[] {
-    if (this.selectedStatus === 'ALL') {
-      return this.claims;
-    }
+    const search = this.searchTerm.trim().toLowerCase();
 
-    return this.claims.filter(
-      (claim) => claim.status === this.selectedStatus,
-    );
+    const filteredClaims = this.claims.filter((claim) => {
+      const matchesStatus =
+        this.selectedStatus === 'ALL' ||
+        claim.status === this.selectedStatus;
+
+      const matchesSearch =
+        !search ||
+        claim.referenceNumber.toLowerCase().includes(search) ||
+        claim.claimantName.toLowerCase().includes(search) ||
+        claim.claimantEmail.toLowerCase().includes(search);
+
+      return matchesStatus && matchesSearch;
+    });
+
+    return [...filteredClaims].sort((a, b) => {
+      if (this.selectedSort === 'HIGHEST_LOSS') {
+        return b.estimatedLoss - a.estimatedLoss;
+      }
+
+      const firstDate = new Date(a.createdAt).getTime();
+      const secondDate = new Date(b.createdAt).getTime();
+
+      if (this.selectedSort === 'OLDEST') {
+        return firstDate - secondDate;
+      }
+
+      return secondDate - firstDate;
+    });
   }
 
   get unassignedCount(): number {
@@ -63,8 +93,14 @@ export class OfficerDashboard implements OnInit {
   }
 
   get outstandingExposure(): number {
+    const openStatuses: ClaimStatus[] = [
+      'SUBMITTED',
+      'UNDER_REVIEW',
+      'INFO_REQUESTED',
+    ];
+
     return this.claims
-      .filter((claim) => claim.status !== 'REJECTED')
+      .filter((claim) => openStatuses.includes(claim.status))
       .reduce(
         (total, claim) => total + claim.estimatedLoss,
         0,
@@ -77,15 +113,11 @@ export class OfficerDashboard implements OnInit {
 
     this.claimService.getClaims().subscribe({
       next: (claims) => {
-        this.claims = [...claims].sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() -
-            new Date(a.createdAt).getTime(),
-        );
-
+        this.claims = claims;
         this.isLoading = false;
         this.changeDetector.detectChanges();
       },
+
       error: (error) => {
         console.error('Unable to load officer claims:', error);
 
@@ -97,9 +129,25 @@ export class OfficerDashboard implements OnInit {
     });
   }
 
-  setFilter(event: Event): void {
+  setStatusFilter(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedStatus = select.value as StatusFilter;
+  }
+
+  setSort(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.selectedSort = select.value as SortOption;
+  }
+
+  setSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm = input.value;
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.selectedStatus = 'ALL';
+    this.selectedSort = 'NEWEST';
   }
 
   assignToMe(claim: Claim): void {
@@ -113,6 +161,7 @@ export class OfficerDashboard implements OnInit {
         claim.id,
         'Alex Wong',
       ),
+      `${claim.referenceNumber} assigned successfully.`,
     );
   }
 
@@ -130,6 +179,7 @@ export class OfficerDashboard implements OnInit {
         claim.id,
         status,
       ),
+      `${claim.referenceNumber} updated to ${this.formatStatus(status)}.`,
     );
   }
 
@@ -150,12 +200,22 @@ export class OfficerDashboard implements OnInit {
       .replaceAll('_', '-')}`;
   }
 
+  isHighExposure(claim: Claim): boolean {
+    return (
+      claim.estimatedLoss >= 10000 &&
+      claim.status !== 'APPROVED' &&
+      claim.status !== 'REJECTED'
+    );
+  }
+
   private runClaimAction(
     claimId: string,
-    request: ReturnType<ClaimService['updateClaim']>,
+    request: Observable<Claim>,
+    successMessage: string,
   ): void {
     this.actionInProgressId = claimId;
     this.errorMessage = '';
+    this.successMessage = '';
 
     request.subscribe({
       next: (updatedClaim) => {
@@ -166,8 +226,10 @@ export class OfficerDashboard implements OnInit {
         );
 
         this.actionInProgressId = null;
+        this.showSuccessMessage(successMessage);
         this.changeDetector.detectChanges();
       },
+
       error: (error) => {
         console.error('Claim update failed:', error);
 
@@ -177,5 +239,14 @@ export class OfficerDashboard implements OnInit {
         this.changeDetector.detectChanges();
       },
     });
+  }
+
+  private showSuccessMessage(message: string): void {
+    this.successMessage = message;
+
+    window.setTimeout(() => {
+      this.successMessage = '';
+      this.changeDetector.detectChanges();
+    }, 3000);
   }
 }

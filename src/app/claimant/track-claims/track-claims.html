@@ -4,12 +4,21 @@
       <p class="eyebrow">Claimant portal</p>
       <h1>Track your claims</h1>
       <p class="subtitle">
-        View the latest status and details of your submitted claims.
+        View the latest status and progress of your submitted claims.
       </p>
     </div>
 
-    <button type="button" class="refresh-button" (click)="loadClaims()">
-      Refresh
+    <button
+      type="button"
+      class="refresh-button"
+      [disabled]="isLoading"
+      (click)="loadClaims()"
+    >
+      @if (isLoading) {
+        Refreshing...
+      } @else {
+        Refresh
+      }
     </button>
   </div>
 
@@ -22,7 +31,10 @@
     <div class="state-card error-state">
       <h2>Unable to load claims</h2>
       <p>{{ errorMessage }}</p>
-      <button type="button" (click)="loadClaims()">Try again</button>
+
+      <button type="button" (click)="loadClaims()">
+        Try again
+      </button>
     </div>
   } @else if (claims.length === 0) {
     <div class="state-card">
@@ -31,8 +43,17 @@
     </div>
   } @else {
     <div class="claims-summary">
-      <span>{{ claims.length }} total claims</span>
-      <span>Last refreshed just now</span>
+      <span>
+        {{ claims.length }}
+        {{ claims.length === 1 ? 'claim' : 'claims' }}
+      </span>
+
+      @if (lastRefreshed) {
+        <span>
+          Last refreshed
+          {{ lastRefreshed | date: 'h:mm a' }}
+        </span>
+      }
     </div>
 
     <div class="claims-grid">
@@ -44,46 +65,160 @@
               <h2>{{ claim.referenceNumber }}</h2>
             </div>
 
-            <span class="status-badge" [class]="statusClass(claim.status)">
+            <span
+              class="status-badge"
+              [class]="statusClass(claim.status)"
+            >
               {{ formatStatus(claim.status) }}
             </span>
           </div>
 
           <div class="claim-type">
-            {{ claim.claimType === 'MOTOR' ? 'Motor claim' : 'Property claim' }}
+            {{
+              claim.claimType === 'MOTOR'
+                ? 'Motor claim'
+                : 'Property claim'
+            }}
           </div>
 
-          <p class="description">{{ claim.description }}</p>
+          <p class="description">
+            {{ claim.description }}
+          </p>
+
+          <div
+            class="progress-section"
+            aria-label="Claim progress"
+          >
+            <p class="progress-title">Claim progress</p>
+
+            <div class="progress-timeline">
+              <div class="progress-step complete">
+                <span class="step-marker">✓</span>
+                <span class="step-label">Submitted</span>
+              </div>
+
+              <div
+                class="progress-line"
+                [class.complete]="
+                  hasReachedReview(claim.status)
+                "
+              ></div>
+
+              <div
+                class="progress-step"
+                [class.complete]="
+                  hasReachedReview(claim.status)
+                "
+              >
+                <span class="step-marker">
+                  @if (hasReachedReview(claim.status)) {
+                    ✓
+                  } @else {
+                    2
+                  }
+                </span>
+
+                <span class="step-label">Under review</span>
+              </div>
+
+              <div
+                class="progress-line"
+                [class.complete]="hasDecision(claim.status)"
+              ></div>
+
+              <div
+                class="progress-step"
+                [class.complete]="hasDecision(claim.status)"
+                [class.rejected]="
+                  claim.status === 'REJECTED'
+                "
+              >
+                <span class="step-marker">
+                  @if (hasDecision(claim.status)) {
+                    ✓
+                  } @else {
+                    3
+                  }
+                </span>
+
+                <span class="step-label">
+                  {{ decisionLabel(claim.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          @if (claim.status === 'SUBMITTED') {
+            <div class="pending-message">
+              <strong>Awaiting assignment</strong>
+              <span>
+                Your claim has been received and is waiting for a claims officer.
+              </span>
+            </div>
+          }
+
+          @if (claim.status === 'INFO_REQUESTED') {
+            <div class="attention-message">
+              <strong>Action required</strong>
+              <span>
+                The claims officer needs additional information before continuing the assessment.
+              </span>
+            </div>
+          }
+
+          @if (claim.status === 'APPROVED') {
+            <div class="decision-message approved-message">
+              <strong>Claim approved</strong>
+              <span>
+                Your claim assessment has been completed successfully.
+              </span>
+            </div>
+          }
+
+          @if (claim.status === 'REJECTED') {
+            <div class="decision-message rejected-message">
+              <strong>Claim decision completed</strong>
+              <span>
+                This claim was not approved following assessment.
+              </span>
+            </div>
+          }
 
           <div class="details-grid">
             <div>
               <span class="detail-label">Incident date</span>
-              <strong>{{ claim.incidentDate | date: 'd MMM yyyy' }}</strong>
+              <strong>
+                {{ claim.incidentDate | date: 'd MMM yyyy' }}
+              </strong>
             </div>
 
             <div>
               <span class="detail-label">Estimated loss</span>
               <strong>
-                {{ claim.estimatedLoss | currency: 'SGD' : 'symbol' : '1.0-0' }}
+                {{
+                  claim.estimatedLoss
+                    | currency: 'SGD' : 'symbol' : '1.0-0'
+                }}
               </strong>
             </div>
 
             <div>
-              <span class="detail-label">Assigned officer</span>
-              <strong>{{ claim.assignedOfficer || 'Not assigned yet' }}</strong>
+              <span class="detail-label">
+                Assigned officer
+              </span>
+
+              <strong>
+                {{ claim.assignedOfficer || 'Not assigned yet' }}
+              </strong>
             </div>
 
             <div>
               <span class="detail-label">Submitted</span>
-              <strong>{{ claim.createdAt | date: 'd MMM yyyy' }}</strong>
+              <strong>
+                {{ claim.createdAt | date: 'd MMM yyyy' }}
+              </strong>
             </div>
           </div>
-
-          @if (claim.status === 'INFO_REQUESTED') {
-            <div class="attention-message">
-              Additional information is required for this claim.
-            </div>
-          }
         </article>
       }
     </div>
