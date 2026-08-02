@@ -58,7 +58,9 @@ The mock API will be available at:
 http://localhost:3000/claims
 
 The mock backend reads and updates claim data stored in:
+```text
 db.json
+```
 
 Keep this terminal running while using the application.
 
@@ -185,5 +187,6 @@ AI was used to support planning, Angular syntax, debugging, styling and document
 Suggestions were reviewed, tested and adapted before being included in the project.
 
 The detailed development record is available in:
+```text
 docs/ai-working-journal.md
-
+```
