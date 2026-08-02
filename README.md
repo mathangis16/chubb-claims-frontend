@@ -1,59 +1,187 @@
-# ClaimsPortal
+# Chubb Claims Portal
+A frontend prototype supporting two user journeys:
+- Claimants can submit claims, track progress and provide additional information when requested.
+- Claims officers can review claims, manage assignments, request information and record claim decisions.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.2.
+The application was built as an Angular frontend with a mock REST backend to demonstrate the main claims workflow within the assessment time limit.
 
-## Development server
+## Features
 
-To start a local development server, run:
+### Claimant experience
+- Submit motor or property claims
+- Form validation and submission feedback
+- Track claim status and assigned officer
+- View a visual claim progress timeline
+- Respond when additional information is requested
+- View loading, error and empty states
 
+### Claims officer experience
+- View workload summary metrics
+- View outstanding open-claim exposure
+- Search by reference number, claimant name or email
+- Filter claims by status
+- Sort by date or estimated loss
+- Assign unassigned claims
+- Request additional information
+- Approve or reject claims with confirmation
+- View additional information submitted by claimants
+- Identify high-exposure open claims
+
+## Technology
+- Angular 22
+- TypeScript
+- SCSS
+- Angular Reactive Forms
+- Angular HttpClient
+- RxJS
+- JSON Server
+- Vitest through Angular's testing setup
+
+## Running the application
+
+### Prerequisites
+- Node.js 22 or later
+- npm
+
+### Install dependencies
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### Start the mock backend
+Run this command in the first terminal:
 ```bash
-ng generate component component-name
+npx json-server --watch db.json --port 3000
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The mock API will be available at:
+http://localhost:3000/claims
 
+The mock backend reads and updates claim data stored in:
+db.json
+
+Keep this terminal running while using the application.
+
+### Start the Angular application
+Open a second terminal in the same project folder and run:
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+The frontend will be available at:
+http://localhost:4200
 
-To build the project run:
+Both terminals must remain running:
+- JSON Server runs the mock claims API on port `3000`.
+- Angular runs the frontend application on port `4200`.
 
+## Running tests
+Run the full test suite once with:
 ```bash
-ng build
+npm test -- --watch=false
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+At the time of completion, the project has five passing test files and six passing tests covering:
+- application creation and portal title rendering,
+- claim service creation,
+- claimant submission component creation,
+- claimant tracking component creation,
+- officer dashboard component creation.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
+## Production build
+Create an optimised production build with:
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+The compiled application will be generated in:
+dist/claims-portal
 
-For end-to-end (e2e) testing, run:
+## Application structure
+src/app/
+├── claimant/
+│   ├── submit-claim/
+│   └── track-claims/
+├── officer/
+│   └── officer-dashboard/
+├── core/
+│   ├── models/
+│   └── services/
+├── app.routes.ts
+├── app.ts
+├── app.html
+└── app.scss
 
-```bash
-ng e2e
-```
+### Shared core layer
+The `Claim` interface and `ClaimStatus` type define the shared claims data model.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+`ClaimService` provides the API boundary between the Angular components and the mock REST backend. Components do not directly read from or write to `db.json`.
 
-## Additional Resources
+### Feature separation
+Claimant and claims-officer workflows use separate routes and components while sharing the same claim model and service.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+A route-synchronised role switch is included to demonstrate both user experiences without implementing authentication.
+
+In a production system, the user role would come from authenticated identity information, and route guards would restrict access.
+
+## Data and state flow
+1. Components request or update claims through `ClaimService`.
+2. `ClaimService` sends HTTP requests to JSON Server.
+3. JSON Server reads from or writes to `db.json`.
+4. Components update their local state after receiving the response.
+5. Loading, success and error states provide feedback during asynchronous operations.
+
+## Asynchronous processing approach
+The prototype uses REST requests and manual refresh controls to represent claim updates that may happen over time.
+
+In a production architecture, backend services could publish claim lifecycle events through Kafka. The Angular frontend would not communicate with Kafka directly. It could receive updates through a backend API using polling, Server-Sent Events or WebSockets.
+
+## Scope decisions
+
+### Implemented
+- Claim submission
+- Claim tracking
+- Visual progress timeline
+- Claim assignment
+- Claim status updates
+- Additional-information request and response workflow
+- Officer search, filtering and sorting
+- Workload summary metrics
+- Outstanding exposure calculation
+- Loading, empty, error and success states
+- Responsive styling
+- Basic automated tests
+- Mock REST persistence
+
+### Not implemented
+- Authentication and authorisation
+- Claimant-specific account filtering
+- Document or image uploads
+- Pagination
+- Real backend services
+- Direct Kafka integration
+- Full claim audit history
+- Production deployment
+
+These items were left outside the prototype so that development could focus on a coherent end-to-end claims workflow within the assessment time limit.
+
+## Accessibility and UX
+
+The application includes:
+- semantic form labels,
+- visible keyboard focus states,
+- status text in addition to colour,
+- disabled controls during active requests,
+- confirmation before final claim decisions,
+- responsive layouts,
+- loading, empty and error feedback.
+
+## AI-assisted development
+
+AI was used to support planning, Angular syntax, debugging, styling and documentation.
+
+Suggestions were reviewed, tested and adapted before being included in the project.
+
+The detailed development record is available in:
+docs/ai-working-journal.md
+
