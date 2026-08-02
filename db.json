@@ -64,6 +64,20 @@
       "status": "REJECTED",
       "assignedOfficer": "Bob Allen",
       "createdAt": "2026-07-16T10:00:00"
+    },
+    {
+      "referenceNumber": "CLM-814941",
+      "claimType": "PROPERTY",
+      "claimantName": "Jake Ross",
+      "claimantEmail": "jakeross16@example.com",
+      "incidentDate": "2026-07-30",
+      "description": "Damage to vehicle when parked",
+      "estimatedLoss": 2000,
+      "status": "SUBMITTED",
+      "assignedOfficer": null,
+      "createdAt": "2026-08-02T13:36:54.941Z",
+      "id": "iJGP-HB6aXM"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

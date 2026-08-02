@@ -1,1 +1,167 @@
-<p>submit-claim works!</p>
+<section class="page">
+  <div class="page-header">
+    <p class="eyebrow">Claimant portal</p>
+    <h1>Report an incident</h1>
+    <p class="subtitle">
+      Submit the details below and receive a claim reference immediately.
+    </p>
+  </div>
+
+  <div class="layout">
+    <form class="claim-form" [formGroup]="claimForm" (ngSubmit)="submitClaim()">
+      <div class="form-section">
+        <div class="section-heading">
+          <span>1</span>
+          <div>
+            <h2>Claim details</h2>
+            <p>Tell us what type of incident occurred.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="claimType">Claim type</label>
+          <select id="claimType" formControlName="claimType">
+            <option value="MOTOR">Motor</option>
+            <option value="PROPERTY">Property</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="incidentDate">Incident date</label>
+          <input
+            id="incidentDate"
+            type="date"
+            formControlName="incidentDate"
+          />
+          @if (fieldInvalid('incidentDate')) {
+            <p class="field-error">Please select the incident date.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="description">Incident description</label>
+          <textarea
+            id="description"
+            rows="5"
+            formControlName="description"
+            placeholder="Describe what happened and the damage caused."
+          ></textarea>
+          <div class="field-footer">
+            @if (fieldInvalid('description')) {
+              <p class="field-error">
+                Please enter at least 20 characters.
+              </p>
+            } @else {
+              <span>Include the key facts and visible damage.</span>
+            }
+            <span>{{ claimForm.controls.description.value.length }}/500</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="estimatedLoss">Estimated loss (SGD)</label>
+          <input
+            id="estimatedLoss"
+            type="number"
+            min="1"
+            formControlName="estimatedLoss"
+            placeholder="e.g. 3500"
+          />
+          @if (fieldInvalid('estimatedLoss')) {
+            <p class="field-error">Enter an amount greater than zero.</p>
+          }
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-heading">
+          <span>2</span>
+          <div>
+            <h2>Contact information</h2>
+            <p>We will use these details for claim updates.</p>
+          </div>
+        </div>
+
+        <div class="two-column">
+          <div class="field">
+            <label for="claimantName">Full name</label>
+            <input
+              id="claimantName"
+              type="text"
+              formControlName="claimantName"
+              placeholder="Your full name"
+            />
+            @if (fieldInvalid('claimantName')) {
+              <p class="field-error">Please enter your name.</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="claimantEmail">Email address</label>
+            <input
+              id="claimantEmail"
+              type="email"
+              formControlName="claimantEmail"
+              placeholder="name@example.com"
+            />
+            @if (fieldInvalid('claimantEmail')) {
+              <p class="field-error">Enter a valid email address.</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      <div class="form-actions">
+        <p>By submitting, you confirm that the information is accurate.</p>
+
+        <button type="submit" [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            Submitting...
+          } @else {
+            Submit claim
+          }
+        </button>
+      </div>
+    </form>
+
+    <aside class="sidebar">
+      @if (submittedClaim) {
+        <div class="success-card">
+          <div class="success-icon">✓</div>
+          <p class="eyebrow">Claim submitted</p>
+          <h2>{{ submittedClaim.referenceNumber }}</h2>
+          <p>
+            Your claim has been received and is awaiting assignment.
+          </p>
+
+          <div class="success-detail">
+            <span>Status</span>
+            <strong>Submitted</strong>
+          </div>
+
+          <a routerLink="/claimant/claims">View my claims</a>
+        </div>
+      } @else {
+        <div class="information-card">
+          <p class="eyebrow">Before you begin</p>
+          <h2>What you will need</h2>
+
+          <ul>
+            <li>The incident date</li>
+            <li>A clear description of what happened</li>
+            <li>An estimated value of the damage</li>
+            <li>Your current contact details</li>
+          </ul>
+
+          <div class="notice">
+            Documents and photographs would be supported in a future version.
+          </div>
+        </div>
+      }
+    </aside>
+  </div>
+</section>
