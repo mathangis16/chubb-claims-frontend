@@ -13,8 +13,8 @@
       <h1>Officer dashboard</h1>
 
       <p class="subtitle">
-        Review incoming claims, manage assignments and monitor
-        outstanding exposure.
+        Prioritise claims, manage assignments and record
+        decisions.
       </p>
     </div>
 
@@ -43,7 +43,9 @@
 
   <div class="summary-grid">
     <article class="summary-card">
-      <div class="summary-icon">⌁</div>
+      <div class="summary-icon unassigned-icon">
+        <span aria-hidden="true">01</span>
+      </div>
 
       <div>
         <span>Unassigned claims</span>
@@ -53,7 +55,9 @@
     </article>
 
     <article class="summary-card">
-      <div class="summary-icon">◷</div>
+      <div class="summary-icon review-icon">
+        <span aria-hidden="true">02</span>
+      </div>
 
       <div>
         <span>Under review</span>
@@ -63,7 +67,9 @@
     </article>
 
     <article class="summary-card">
-      <div class="summary-icon">!</div>
+      <div class="summary-icon information-icon">
+        <span aria-hidden="true">03</span>
+      </div>
 
       <div>
         <span>Information requested</span>
@@ -73,7 +79,9 @@
     </article>
 
     <article class="summary-card exposure-card">
-      <div class="summary-icon">$</div>
+      <div class="summary-icon exposure-icon">
+        <span aria-hidden="true">04</span>
+      </div>
 
       <div>
         <span>Outstanding exposure</span>
@@ -96,9 +104,12 @@
         <h2>Claims work queue</h2>
 
         <p>
-          {{ filteredClaims.length }}
-          {{ filteredClaims.length === 1 ? 'claim' : 'claims' }}
-          currently shown
+          Showing {{ filteredClaims.length }}
+          {{
+            filteredClaims.length === 1
+              ? 'claim'
+              : 'claims'
+          }}
         </p>
       </div>
 
@@ -238,7 +249,10 @@
           </thead>
 
           <tbody>
-            @for (claim of filteredClaims; track claim.id) {
+            @for (
+              claim of filteredClaims;
+              track claim.id
+            ) {
               <tr>
                 <td>
                   <strong>
@@ -294,7 +308,9 @@
                 <td>
                   <span
                     class="status-badge"
-                    [class]="statusClass(claim.status)"
+                    [class]="
+                      statusClass(claim.status)
+                    "
                   >
                     {{ formatStatus(claim.status) }}
                   </span>
@@ -314,29 +330,39 @@
 
                 <td>
                   @if (claim.additionalInformation) {
-                    <details class="information-details">
+                    <details
+                      class="information-details"
+                    >
                       <summary>
                         View response
                       </summary>
 
-                      <div class="information-response">
+                      <div
+                        class="information-response"
+                      >
                         <p>
-                          {{ claim.additionalInformation }}
+                          {{
+                            claim.additionalInformation
+                          }}
                         </p>
 
-                        @if (claim.informationProvidedAt) {
+                        @if (
+                          claim.informationProvidedAt
+                        ) {
                           <span>
                             Submitted
                             {{
                               claim.informationProvidedAt
-                                | date: 'd MMM yyyy, h:mm a'
+                                | date
+                                  : 'd MMM yyyy, h:mm a'
                             }}
                           </span>
                         }
                       </div>
                     </details>
                   } @else if (
-                    claim.status === 'INFO_REQUESTED'
+                    claim.status ===
+                    'INFO_REQUESTED'
                   ) {
                     <span
                       class="response-status waiting-response"
@@ -359,12 +385,14 @@
                         type="button"
                         class="primary-action"
                         [disabled]="
-                          actionInProgressId === claim.id
+                          actionInProgressId ===
+                          claim.id
                         "
                         (click)="assignToMe(claim)"
                       >
                         @if (
-                          actionInProgressId === claim.id
+                          actionInProgressId ===
+                          claim.id
                         ) {
                           Assigning...
                         } @else {
@@ -373,16 +401,20 @@
                       </button>
                     } @else if (
                       claim.status === 'SUBMITTED' ||
-                      claim.status === 'UNDER_REVIEW' ||
-                      claim.status === 'INFO_REQUESTED'
+                      claim.status ===
+                        'UNDER_REVIEW' ||
+                      claim.status ===
+                        'INFO_REQUESTED'
                     ) {
                       @if (
-                        claim.status !== 'INFO_REQUESTED'
+                        claim.status !==
+                        'INFO_REQUESTED'
                       ) {
                         <button
                           type="button"
                           [disabled]="
-                            actionInProgressId === claim.id
+                            actionInProgressId ===
+                            claim.id
                           "
                           (click)="
                             changeStatus(
@@ -399,17 +431,19 @@
                         type="button"
                         class="approve-action"
                         [disabled]="
-                          actionInProgressId === claim.id
+                          actionInProgressId ===
+                          claim.id
                         "
                         (click)="
-                          changeStatus(
+                          confirmStatusChange(
                             claim,
                             'APPROVED'
                           )
                         "
                       >
                         @if (
-                          actionInProgressId === claim.id
+                          actionInProgressId ===
+                          claim.id
                         ) {
                           Updating...
                         } @else {
@@ -421,10 +455,11 @@
                         type="button"
                         class="reject-action"
                         [disabled]="
-                          actionInProgressId === claim.id
+                          actionInProgressId ===
+                          claim.id
                         "
                         (click)="
-                          changeStatus(
+                          confirmStatusChange(
                             claim,
                             'REJECTED'
                           )
@@ -433,7 +468,9 @@
                         Reject
                       </button>
                     } @else {
-                      <span class="decision-complete">
+                      <span
+                        class="decision-complete"
+                      >
                         Decision complete
                       </span>
                     }

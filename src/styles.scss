@@ -1,10 +1,51 @@
-* {
+:root {
+  /* Chubb-inspired brand palette */
+  --brand-black: #000000;
+  --brand-white: #ffffff;
+  --brand-ink: #171717;
+  --brand-surface: #f7f7f5;
+  --brand-border: #e2e2df;
+  --brand-muted: #696969;
+
+  --brand-blue: #150f96;
+  --brand-turquoise: #01c1d6;
+  --brand-purple: #6e27c5;
+  --brand-green: #64a70b;
+  --brand-orange: #f26a21;
+  --brand-magenta: #d9008d;
+  --brand-red: #d52b1e;
+  --brand-yellow: #ffb81c;
+  --brand-grey: #afafaf;
+
+  --claimant-accent: var(--brand-turquoise);
+  --officer-accent: var(--brand-purple);
+
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  --shadow-small: 0 3px 12px rgb(0 0 0 / 6%);
+  --shadow-medium: 0 12px 32px rgb(0 0 0 / 10%);
+  --focus-ring: 0 0 0 3px rgb(1 193 214 / 22%);
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
-  min-width: 320px;
-  background: #f7f8fa;
+  min-height: 100%;
+  background: var(--brand-surface);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,21 +53,15 @@ body {
   margin: 0;
   background:
     radial-gradient(
-      circle at top right,
-      rgb(178 31 45 / 4%),
-      transparent 380px
+      circle at 12% 2%,
+      rgb(1 193 214 / 7%),
+      transparent 25rem
     ),
-    #f7f8fa;
-  color: #172033;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+    var(--brand-surface);
+  color: var(--brand-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -38,15 +73,44 @@ textarea {
 }
 
 button,
-a {
-  -webkit-tap-highlight-color: transparent;
+select {
+  cursor: pointer;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid rgb(178 31 45 / 20%);
-  outline-offset: 2px;
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+summary {
+  &:focus-visible {
+    outline: 3px solid rgb(1 193 214 / 25%);
+    outline-offset: 2px;
+  }
+}
+
+::selection {
+  background: rgb(1 193 214 / 26%);
+  color: var(--brand-black);
 }

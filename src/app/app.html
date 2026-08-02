@@ -1,67 +1,114 @@
-<header class="app-header">
-  <div class="header-inner">
-    <a class="brand" routerLink="/claimant/submit">
-      <span class="brand-mark">C</span>
-
-      <span class="brand-text">
-        <strong>Chubb Claims</strong>
-        <small>APAC Claims Portal</small>
-      </span>
-    </a>
-
-    <div class="header-actions">
-      <div
-        class="role-switch"
-        role="group"
-        aria-label="Select user role"
+<div
+  class="app-shell"
+  [class.officer-theme]="selectedRole === 'OFFICER'"
+>
+  <header class="site-header">
+    <div class="header-main">
+      <a
+        class="brand"
+        [routerLink]="
+          selectedRole === 'CLAIMANT'
+            ? '/claimant/submit'
+            : '/officer/dashboard'
+        "
+        aria-label="Claims portal home"
       >
-        <button
-          type="button"
-          [class.active]="selectedRole === 'CLAIMANT'"
-          [attr.aria-pressed]="selectedRole === 'CLAIMANT'"
-          (click)="switchRole('CLAIMANT')"
-        >
-          Claimant
-        </button>
+        <span class="brand-title">Chubb Claims Portal</span>
+        <span class="brand-description">
+          APAC digital claims experience
+        </span>
+      </a>
 
-        <button
-          type="button"
-          [class.active]="selectedRole === 'OFFICER'"
-          [attr.aria-pressed]="selectedRole === 'OFFICER'"
-          (click)="switchRole('OFFICER')"
+      <div class="header-actions">
+        <nav
+          class="primary-navigation"
+          aria-label="Primary navigation"
         >
-          Claims Officer
-        </button>
+          @if (selectedRole === 'CLAIMANT') {
+            <a
+              routerLink="/claimant/submit"
+              routerLinkActive="active-link"
+            >
+              Submit a claim
+            </a>
+
+            <a
+              routerLink="/claimant/claims"
+              routerLinkActive="active-link"
+            >
+              Track claims
+            </a>
+          } @else {
+            <a
+              routerLink="/officer/dashboard"
+              routerLinkActive="active-link"
+            >
+              Officer dashboard
+            </a>
+          }
+        </nav>
+
+        <div class="role-control">
+          <span class="role-label">Viewing as</span>
+
+          <div
+            class="role-switch"
+            role="group"
+            aria-label="Choose portal view"
+          >
+            <button
+              type="button"
+              [class.active]="selectedRole === 'CLAIMANT'"
+              [attr.aria-pressed]="
+                selectedRole === 'CLAIMANT'
+              "
+              (click)="switchRole('CLAIMANT')"
+            >
+              Claimant
+            </button>
+
+            <button
+              type="button"
+              [class.active]="selectedRole === 'OFFICER'"
+              [attr.aria-pressed]="
+                selectedRole === 'OFFICER'
+              "
+              (click)="switchRole('OFFICER')"
+            >
+              Officer
+            </button>
+          </div>
+        </div>
       </div>
-
-      <nav aria-label="Main navigation">
-        @if (selectedRole === 'CLAIMANT') {
-          <a
-            routerLink="/claimant/submit"
-            routerLinkActive="active"
-          >
-            Submit claim
-          </a>
-
-          <a
-            routerLink="/claimant/claims"
-            routerLinkActive="active"
-          >
-            Track claims
-          </a>
-        } @else {
-          <a
-            routerLink="/officer/dashboard"
-            routerLinkActive="active"
-          >
-            Officer dashboard
-          </a>
-        }
-      </nav>
     </div>
-  </div>
-</header>
 
-<main class="app-content">
-  <router-outlet></router-outlet>
-</main>
+    <div
+      class="colour-strip"
+      aria-hidden="true"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+
+  <footer class="site-footer">
+    <span>
+      Claims Portal prototype
+    </span>
+
+    <span>
+      Angular frontend with mock REST services
+    </span>
+  </footer>
+</div>

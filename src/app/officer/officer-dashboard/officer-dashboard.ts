@@ -24,7 +24,8 @@ type SortOption = 'NEWEST' | 'OLDEST' | 'HIGHEST_LOSS';
 })
 export class OfficerDashboard implements OnInit {
   private readonly claimService = inject(ClaimService);
-  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly changeDetector =
+    inject(ChangeDetectorRef);
 
   claims: Claim[] = [];
 
@@ -51,9 +52,15 @@ export class OfficerDashboard implements OnInit {
 
       const matchesSearch =
         !search ||
-        claim.referenceNumber.toLowerCase().includes(search) ||
-        claim.claimantName.toLowerCase().includes(search) ||
-        claim.claimantEmail.toLowerCase().includes(search);
+        claim.referenceNumber
+          .toLowerCase()
+          .includes(search) ||
+        claim.claimantName
+          .toLowerCase()
+          .includes(search) ||
+        claim.claimantEmail
+          .toLowerCase()
+          .includes(search);
 
       return matchesStatus && matchesSearch;
     });
@@ -100,9 +107,12 @@ export class OfficerDashboard implements OnInit {
     ];
 
     return this.claims
-      .filter((claim) => openStatuses.includes(claim.status))
+      .filter((claim) =>
+        openStatuses.includes(claim.status),
+      )
       .reduce(
-        (total, claim) => total + claim.estimatedLoss,
+        (total, claim) =>
+          total + claim.estimatedLoss,
         0,
       );
   }
@@ -119,7 +129,10 @@ export class OfficerDashboard implements OnInit {
       },
 
       error: (error) => {
-        console.error('Unable to load officer claims:', error);
+        console.error(
+          'Unable to load officer claims:',
+          error,
+        );
 
         this.errorMessage =
           'Claims could not be loaded. Please try again.';
@@ -131,7 +144,8 @@ export class OfficerDashboard implements OnInit {
 
   setStatusFilter(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    this.selectedStatus = select.value as StatusFilter;
+    this.selectedStatus =
+      select.value as StatusFilter;
   }
 
   setSort(event: Event): void {
@@ -183,13 +197,33 @@ export class OfficerDashboard implements OnInit {
     );
   }
 
+  confirmStatusChange(
+    claim: Claim,
+    status: 'APPROVED' | 'REJECTED',
+  ): void {
+    const action =
+      status === 'APPROVED' ? 'approve' : 'reject';
+
+    const confirmed = window.confirm(
+      `Are you sure you want to ${action} ${claim.referenceNumber}? ` +
+        'This will complete the claim decision.',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.changeStatus(claim, status);
+  }
+
   formatStatus(status: ClaimStatus): string {
     return status
       .toLowerCase()
       .split('_')
       .map(
         (word) =>
-          word.charAt(0).toUpperCase() + word.slice(1),
+          word.charAt(0).toUpperCase() +
+          word.slice(1),
       )
       .join(' ');
   }
@@ -234,14 +268,16 @@ export class OfficerDashboard implements OnInit {
         console.error('Claim update failed:', error);
 
         this.errorMessage =
-          'The claim could not be updated. Please try again.';
+          'We couldn’t save this update. Try again.';
         this.actionInProgressId = null;
         this.changeDetector.detectChanges();
       },
     });
   }
 
-  private showSuccessMessage(message: string): void {
+  private showSuccessMessage(
+    message: string,
+  ): void {
     this.successMessage = message;
 
     window.setTimeout(() => {
