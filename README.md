@@ -98,6 +98,7 @@ The compiled application will be generated in:
 dist/claims-portal
 
 ## Application structure
+'''text
 src/app/
 ├── claimant/
 │   ├── submit-claim/
@@ -111,6 +112,7 @@ src/app/
 ├── app.ts
 ├── app.html
 └── app.scss
+'''
 
 ### Shared core layer
 The `Claim` interface and `ClaimStatus` type define the shared claims data model.
