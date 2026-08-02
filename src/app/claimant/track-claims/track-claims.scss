@@ -291,6 +291,105 @@ h1 {
   opacity: 0.85;
 }
 
+.provide-info-button {
+  width: fit-content;
+  margin-top: 10px;
+  border: 1px solid #f79009;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #7a2e0e;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.provide-info-button:hover {
+  background: #fff7e8;
+}
+
+.information-form {
+  margin: -8px 0 20px;
+  border: 1px solid #fedf89;
+  border-radius: 10px;
+  background: #fffdf5;
+  padding: 16px;
+}
+
+.information-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #344054;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.information-form textarea {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #172033;
+  padding: 11px 12px;
+  font: inherit;
+  resize: vertical;
+}
+
+.information-form textarea:focus {
+  border-color: #f79009;
+  outline: 3px solid rgb(247 144 9 / 12%);
+}
+
+.information-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+  color: #667085;
+  font-size: 0.76rem;
+}
+
+.information-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancel-button,
+.submit-info-button {
+  border-radius: 8px;
+  padding: 8px 11px;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-button {
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+  color: #475467;
+}
+
+.submit-info-button {
+  border: 1px solid #b21f2d;
+  background: #b21f2d;
+  color: #ffffff;
+}
+
+.cancel-button:disabled,
+.submit-info-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.information-error {
+  margin: 8px 0 0;
+  color: #b42318;
+  font-size: 0.75rem;
+}
+
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -300,6 +399,36 @@ h1 {
 .details-grid strong {
   color: #344054;
   font-size: 0.9rem;
+}
+
+.success-toast {
+  position: fixed;
+  z-index: 200;
+  top: 92px;
+  right: 24px;
+  display: flex;
+  max-width: 390px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #a6f4c5;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #027a48;
+  padding: 13px 16px;
+  box-shadow: 0 12px 32px rgb(16 24 40 / 16%);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.toast-icon {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ecfdf3;
+  font-weight: 800;
 }
 
 .state-card {
@@ -371,5 +500,21 @@ h1 {
 
   .step-label {
     font-size: 0.65rem;
+  }
+
+  .success-toast {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+
+  .information-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .information-actions {
+    justify-content: flex-end;
   }
 }

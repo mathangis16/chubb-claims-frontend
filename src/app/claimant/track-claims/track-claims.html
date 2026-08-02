@@ -1,4 +1,11 @@
 <section class="page">
+  @if (successMessage) {
+    <div class="success-toast" role="status">
+      <span class="toast-icon">✓</span>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
   <div class="page-header">
     <div>
       <p class="eyebrow">Claimant portal</p>
@@ -32,7 +39,10 @@
       <h2>Unable to load claims</h2>
       <p>{{ errorMessage }}</p>
 
-      <button type="button" (click)="loadClaims()">
+      <button
+        type="button"
+        (click)="loadClaims()"
+      >
         Try again
       </button>
     </div>
@@ -61,7 +71,10 @@
         <article class="claim-card">
           <div class="card-header">
             <div>
-              <p class="reference-label">Claim reference</p>
+              <p class="reference-label">
+                Claim reference
+              </p>
+
               <h2>{{ claim.referenceNumber }}</h2>
             </div>
 
@@ -89,12 +102,16 @@
             class="progress-section"
             aria-label="Claim progress"
           >
-            <p class="progress-title">Claim progress</p>
+            <p class="progress-title">
+              Claim progress
+            </p>
 
             <div class="progress-timeline">
               <div class="progress-step complete">
                 <span class="step-marker">✓</span>
-                <span class="step-label">Submitted</span>
+                <span class="step-label">
+                  Submitted
+                </span>
               </div>
 
               <div
@@ -118,17 +135,23 @@
                   }
                 </span>
 
-                <span class="step-label">Under review</span>
+                <span class="step-label">
+                  Under review
+                </span>
               </div>
 
               <div
                 class="progress-line"
-                [class.complete]="hasDecision(claim.status)"
+                [class.complete]="
+                  hasDecision(claim.status)
+                "
               ></div>
 
               <div
                 class="progress-step"
-                [class.complete]="hasDecision(claim.status)"
+                [class.complete]="
+                  hasDecision(claim.status)
+                "
                 [class.rejected]="
                   claim.status === 'REJECTED'
                 "
@@ -151,8 +174,10 @@
           @if (claim.status === 'SUBMITTED') {
             <div class="pending-message">
               <strong>Awaiting assignment</strong>
+
               <span>
-                Your claim has been received and is waiting for a claims officer.
+                Your claim has been received and is waiting
+                for a claims officer.
               </span>
             </div>
           }
@@ -160,24 +185,108 @@
           @if (claim.status === 'INFO_REQUESTED') {
             <div class="attention-message">
               <strong>Action required</strong>
+
               <span>
-                The claims officer needs additional information before continuing the assessment.
+                The claims officer needs additional information
+                before continuing the assessment.
               </span>
+
+              @if (expandedClaimId !== claim.id) {
+                <button
+                  type="button"
+                  class="provide-info-button"
+                  (click)="openInformationForm(claim)"
+                >
+                  Provide information
+                </button>
+              }
             </div>
+
+            @if (expandedClaimId === claim.id) {
+              <div class="information-form">
+                <label
+                  [for]="'additional-info-' + claim.id"
+                >
+                  Additional information
+                </label>
+
+                <textarea
+                  [id]="'additional-info-' + claim.id"
+                  rows="4"
+                  maxlength="500"
+                  placeholder="Provide the details requested by the claims officer."
+                  [value]="additionalInformation"
+                  (input)="setAdditionalInformation($event)"
+                ></textarea>
+
+                <div class="information-footer">
+                  <span>
+                    {{ additionalInformation.length }}/500
+                  </span>
+
+                  <div class="information-actions">
+                    <button
+                      type="button"
+                      class="cancel-button"
+                      [disabled]="
+                        submissionInProgressId === claim.id
+                      "
+                      (click)="closeInformationForm()"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      class="submit-info-button"
+                      [disabled]="
+                        additionalInformation.trim().length < 10 ||
+                        submissionInProgressId === claim.id
+                      "
+                      (click)="
+                        submitAdditionalInformation(claim)
+                      "
+                    >
+                      @if (
+                        submissionInProgressId === claim.id
+                      ) {
+                        Submitting...
+                      } @else {
+                        Submit information
+                      }
+                    </button>
+                  </div>
+                </div>
+
+                @if (
+                  additionalInformation.length > 0 &&
+                  additionalInformation.trim().length < 10
+                ) {
+                  <p class="information-error">
+                    Please provide at least 10 characters.
+                  </p>
+                }
+              </div>
+            }
           }
 
           @if (claim.status === 'APPROVED') {
             <div class="decision-message approved-message">
               <strong>Claim approved</strong>
+
               <span>
-                Your claim assessment has been completed successfully.
+                Your claim assessment has been completed
+                successfully.
               </span>
             </div>
           }
 
           @if (claim.status === 'REJECTED') {
             <div class="decision-message rejected-message">
-              <strong>Claim decision completed</strong>
+              <strong>
+                Claim decision completed
+              </strong>
+
               <span>
                 This claim was not approved following assessment.
               </span>
@@ -186,18 +295,30 @@
 
           <div class="details-grid">
             <div>
-              <span class="detail-label">Incident date</span>
+              <span class="detail-label">
+                Incident date
+              </span>
+
               <strong>
-                {{ claim.incidentDate | date: 'd MMM yyyy' }}
+                {{
+                  claim.incidentDate
+                    | date: 'd MMM yyyy'
+                }}
               </strong>
             </div>
 
             <div>
-              <span class="detail-label">Estimated loss</span>
+              <span class="detail-label">
+                Estimated loss
+              </span>
+
               <strong>
                 {{
                   claim.estimatedLoss
-                    | currency: 'SGD' : 'symbol' : '1.0-0'
+                    | currency
+                      : 'SGD'
+                      : 'symbol'
+                      : '1.0-0'
                 }}
               </strong>
             </div>
@@ -208,14 +329,23 @@
               </span>
 
               <strong>
-                {{ claim.assignedOfficer || 'Not assigned yet' }}
+                {{
+                  claim.assignedOfficer ||
+                    'Not assigned yet'
+                }}
               </strong>
             </div>
 
             <div>
-              <span class="detail-label">Submitted</span>
+              <span class="detail-label">
+                Submitted
+              </span>
+
               <strong>
-                {{ claim.createdAt | date: 'd MMM yyyy' }}
+                {{
+                  claim.createdAt
+                    | date: 'd MMM yyyy'
+                }}
               </strong>
             </div>
           </div>

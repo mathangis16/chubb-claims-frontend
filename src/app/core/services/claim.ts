@@ -39,4 +39,15 @@ export class ClaimService {
   updateClaimStatus(id: string, status: ClaimStatus): Observable<Claim> {
     return this.updateClaim(id, { status });
   }
+
+  submitAdditionalInformation(
+    id: string,
+    additionalInformation: string,
+  ): Observable<Claim> {
+    return this.updateClaim(id, {
+      additionalInformation,
+      informationProvidedAt: new Date().toISOString(),
+      status: 'UNDER_REVIEW',
+    });
+  }
 }

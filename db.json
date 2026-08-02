@@ -35,9 +35,11 @@
       "incidentDate": "2026-07-22",
       "description": "Damage to the vehicle door while parked.",
       "estimatedLoss": 2200,
-      "status": "INFO_REQUESTED",
+      "status": "UNDER_REVIEW",
       "assignedOfficer": "Alex Wong",
-      "createdAt": "2026-07-23T14:45:00"
+      "createdAt": "2026-07-23T14:45:00",
+      "additionalInformation": "The vehicle door has a big dent.",
+      "informationProvidedAt": "2026-08-02T16:34:38.375Z"
     },
     {
       "id": "4",
