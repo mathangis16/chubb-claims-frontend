@@ -136,9 +136,9 @@ In a production system, the user role would come from authenticated identity inf
 5. Loading, success and error states provide feedback during asynchronous operations.
 
 ## Asynchronous processing approach
-The prototype uses REST requests and manual refresh controls to represent claim updates that may happen over time.
+The prototype uses REST requests and refresh controls to show claim updates over time.
 
-In a production architecture, backend services could publish claim lifecycle events through Kafka. The Angular frontend would not communicate with Kafka directly. It could receive updates through a backend API using polling, Server-Sent Events or WebSockets.
+In production, backend services could use Kafka for claim events, while the frontend receives updates through an API using polling, Server-Sent Events or WebSockets.
 
 ## Scope decisions
 
@@ -161,7 +161,6 @@ In a production architecture, backend services could publish claim lifecycle eve
 - Authentication and authorisation
 - Claimant-specific account filtering
 - Document or image uploads
-- Pagination
 - Real backend services
 - Direct Kafka integration
 - Full claim audit history
